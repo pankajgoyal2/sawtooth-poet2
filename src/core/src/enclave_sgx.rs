@@ -27,6 +27,8 @@ use std::vec::Vec;
 use num::ToPrimitive;
 use std::string::String;
 use poet2_util;
+use std::path::Path;
+use std::path::PathBuf;
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 pub struct WaitCertificate {
@@ -84,9 +86,13 @@ impl EnclaveConfig {
     	let spid_vec = vec![0x41; 32]; 
         let spid_str = str::from_utf8(&spid_vec).unwrap();
 
-        let mut lib_path = env::current_dir().unwrap();
-        lib_path.push("/project/sawtooth-poet2/src/build/bin/libpoet_enclave.signed.so");
+        let mut lib_path = PathBuf::new();
         lib_path.push("/usr/lib/libpoet_enclave.signed.so");
+        if ! Path::new(&lib_path).exists(){
+            lib_path = env::current_dir().unwrap();
+            lib_path.push("../build/bin/libpoet_enclave.signed.so");
+        }
+
         let bin_path = &lib_path.into_os_string().into_string().unwrap();
     	
         ffi::init_enclave(&mut eid, bin_path, spid_str).unwrap();        
