@@ -86,11 +86,22 @@ impl EnclaveConfig {
     	let spid_vec = vec![0x41; 32]; 
         let spid_str = str::from_utf8(&spid_vec).unwrap();
 
-        let mut lib_path = PathBuf::new();
-        lib_path.push("/usr/lib/libpoet_enclave.signed.so");
+        //let mut lib_path = PathBuf::new();
+        //lib_path.push("/usr/lib/libpoet_enclave.signed.so");
+        //if ! Path::new(&lib_path).exists(){
+        //    lib_path = env::current_dir().unwrap();
+        //    lib_path.push("../build/bin/libpoet_enclave.signed.so");
+        //}
+
+        let mut lib_path = env::current_dir().unwrap();
+        lib_path.push("../build/bin/libpoet_enclave.signed.so");
         if ! Path::new(&lib_path).exists(){
-            lib_path = env::current_dir().unwrap();
-            lib_path.push("../build/bin/libpoet_enclave.signed.so");
+            //lib_path = Pathbuf::new();
+            lib_path = PathBuf::from("/usr/lib/libpoet_enclave.signed.so");
+            println!("lib_path is {:?}", lib_path);
+        }
+        else {
+            panic!("There is missing libpoet_enclave.signed.so");
         }
 
         let bin_path = &lib_path.into_os_string().into_string().unwrap();
