@@ -9,8 +9,3 @@ services:
     build:
       context: .
       dockerfile: src/core/Dockerfile-installed
-    volumes:
-      - .:/project/sawtooth-poet2/
-    entrypoint: "bash -c \"\
-        tail -f /dev/null \
-        \""
